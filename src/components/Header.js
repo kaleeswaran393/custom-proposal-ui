@@ -1,20 +1,22 @@
 import React from 'react';
 import './Header.css';
+import lumenLogo from '../assets/lumen-logo.png'; // Add this import
 
 const Header = () => {
   return (
     <div className="header">
       <div className="header-left">
         <div className="logo">
-          <span className="logo-icon">PS</span>
+          <img src={lumenLogo} alt="Lumen" className="logo-icon" />
           <div className="logo-text">
-            <h1>ProSlides</h1>
-            <p>Professional Proposal Solutions</p>
+            <p></p>
           </div>
         </div>
       </div>
       <div className="header-center">
-        <button className="create-proposal-btn">Create Proposal</button>
+        <nav>
+          <a href="#create" className="create-proposal-link">Create Proposal</a>
+        </nav>
       </div>
       <div className="header-right">
         <nav>

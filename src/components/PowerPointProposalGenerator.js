@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ClientInformation from './ClientInformation';
 import TopicSelector from './TopicSelector';
 import SelectedTopics from './SelectedTopics';
-import { topicCategories } from '../data/topicData';
 import './PowerPointProposalGenerator.css';
 
 const PowerPointProposalGenerator = () => {
@@ -16,6 +15,7 @@ const PowerPointProposalGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState({ text: '', type: '', visible: false });
+  const [topicCategories, setTopicCategories] = useState({});
 
   // Handle logo upload
   const handleLogoUpload = (event) => {
@@ -92,21 +92,15 @@ const PowerPointProposalGenerator = () => {
   };
 
   // Toggle individual topic selection
-  const toggleTopic = (topicId) => {
-    const index = selectedTopics.findIndex(t => t.id === topicId);
-    
-    if (index === -1) {
-      // Find the topic in categories and add it
-      for (const [categoryName, categoryData] of Object.entries(topicCategories)) {
-        const topic = categoryData.topics.find(t => t.id === topicId);
-        if (topic) {
-          setSelectedTopics(prev => [...prev, {...topic, category: categoryName}]);
-          break;
-        }
+  const toggleTopic = (topic) => {
+    setSelectedTopics(prev => {
+      const exists = prev.some(t => t.id === topic.id);
+      if (exists) {
+        return prev.filter(t => t.id !== topic.id);
+      } else {
+        return [...prev, topic];
       }
-    } else {
-      setSelectedTopics(prev => prev.filter((_, i) => i !== index));
-    }
+    });
   };
 
   // Remove topic from selection
@@ -185,12 +179,13 @@ const PowerPointProposalGenerator = () => {
 
           {/* Available Topics Section */}
           <TopicSelector
-            topicCategories={topicCategories}
             selectedTopics={selectedTopics}
             expandedCategories={expandedCategories}
             toggleCategory={toggleCategory}
             selectAllInCategory={selectAllInCategory}
             toggleTopic={toggleTopic}
+            topicCategories={topicCategories}
+            setTopicCategories={setTopicCategories}
           />
         </div>
 

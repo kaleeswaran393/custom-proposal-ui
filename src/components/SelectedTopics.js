@@ -9,12 +9,13 @@ const SelectedTopics = ({
   statusMessage,
   generateProposal
 }) => {
-  // Group selected topics by category
+  // Group topics by category
   const groupedSelectedTopics = selectedTopics.reduce((acc, topic) => {
-    if (!acc[topic.category]) {
-      acc[topic.category] = [];
+    const category = topic.category || 'Uncategorized';
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[topic.category].push(topic);
+    acc[category].push(topic);
     return acc;
   }, {});
 
@@ -34,28 +35,29 @@ const SelectedTopics = ({
           Object.entries(groupedSelectedTopics).map(([category, topics]) => (
             <div key={category} style={{ marginBottom: '15px' }}>
               <h4 style={{ color: '#4CAF50', marginBottom: '8px', fontSize: '0.9rem' }}>
-                {topicCategories[category].icon} {category}
+                {(topicCategories[category]?.icon || '📁')} {category}
               </h4>
-              {topics.map(topic => (
-                <div key={topic.id} className="selected-topic">
-                  <div>
-                    <strong>{topic.title}</strong>
-                    <span style={{ color: '#666', marginLeft: '10px' }}>{topic.version}</span>
+              {topics.map(topic => {
+                return (
+                  <div key={topic.id} className="selected-topic">
+                    <div>
+                      <strong>{topic.title}</strong>
+                      <span style={{ color: '#666', marginLeft: '10px' }}>{topic.version}</span>
+                    </div>
+                    <button 
+                      className="remove-btn"
+                      onClick={() => removeTopic(topic.id)}
+                    >
+                      ×
+                    </button>
                   </div>
-                  <button 
-                    className="remove-btn"
-                    onClick={() => removeTopic(topic.id)}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ))
         )}
       </div>
       
-      {/* Progress Bar */}
       {isGenerating && (
         <div className="progress-bar">
           <div 
@@ -65,7 +67,6 @@ const SelectedTopics = ({
         </div>
       )}
       
-      {/* Status Message */}
       {statusMessage.visible && (
         <div className={`status-message ${statusMessage.type}`}>
           <div dangerouslySetInnerHTML={{ __html: statusMessage.text }} />
@@ -75,7 +76,7 @@ const SelectedTopics = ({
       <button 
         className="generate-btn"
         onClick={generateProposal}
-        disabled={isGenerating}
+        disabled={isGenerating || selectedTopics.length === 0}
       >
         {isGenerating ? '⏳ Generating Proposal...' : '🚀 Generate Proposal'}
       </button>
