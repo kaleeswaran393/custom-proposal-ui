@@ -1,4 +1,5 @@
 import React from 'react';
+import './TopicSelector.css';  // Make sure to create this CSS file
 
 const TopicSelector = ({
   topicCategories,
@@ -20,21 +21,20 @@ const TopicSelector = ({
           const selectedInCategory = categoryData.topics.filter(topic => 
             selectedTopics.some(selected => selected.id === topic.id)
           ).length;
-          
+
           return (
             <div key={categoryName} className="tree-category">
               <div 
                 className={`category-header ${expandedCategories.has(categoryName) ? 'expanded' : ''}`}
                 onClick={() => toggleCategory(categoryName)}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            
-                  <span>{categoryName}</span>
-                  <span style={{ fontSize: '0.8em', opacity: '0.8' }}>
+                <div className="category-header-left">
+                  <span className="category-name">{categoryName}</span>
+                  <span className="template-count">
                     ({categoryData.topics.length} templates)
                   </span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="category-header-right">
                   <button 
                     className="select-all-btn"
                     onClick={(e) => { 
@@ -52,11 +52,6 @@ const TopicSelector = ({
               
               {expandedCategories.has(categoryName) && (
                 <div className="category-content expanded">
-                  {selectedInCategory > 0 && (
-                    <div className="category-summary">
-                      Selected: {selectedInCategory} of {categoryData.topics.length} templates
-                    </div>
-                  )}
                   {categoryData.topics.map(topic => (
                     <div 
                       key={topic.id}
@@ -70,11 +65,9 @@ const TopicSelector = ({
                       </div>
                       <div className="topic-info">
                         <div className="topic-title">{topic.title}</div>
-                        <div className="topic-description">{topic.description}</div>
                       </div>
                       <div className="topic-meta">
                         <div className="version-info">
-                          <span className="document-version">{topic.version}</span>
                           <span className="last-updated">Updated: {topic.lastUpdated}</span>
                         </div>
                       </div>
