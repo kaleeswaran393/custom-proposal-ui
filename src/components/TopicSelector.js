@@ -1,0 +1,93 @@
+import React from 'react';
+
+const TopicSelector = ({
+  topicCategories,
+  selectedTopics,
+  expandedCategories,
+  toggleCategory,
+  selectAllInCategory,
+  toggleTopic
+}) => {
+  return (
+    <div className="section">
+      <h2>
+        <span className="section-icon">📚</span>
+        Available Templates
+      </h2>
+      
+      <div className="tree-view">
+        {Object.entries(topicCategories).map(([categoryName, categoryData]) => {
+          const selectedInCategory = categoryData.topics.filter(topic => 
+            selectedTopics.some(selected => selected.id === topic.id)
+          ).length;
+          
+          return (
+            <div key={categoryName} className="tree-category">
+              <div 
+                className={`category-header ${expandedCategories.has(categoryName) ? 'expanded' : ''}`}
+                onClick={() => toggleCategory(categoryName)}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            
+                  <span>{categoryName}</span>
+                  <span style={{ fontSize: '0.8em', opacity: '0.8' }}>
+                    ({categoryData.topics.length} templates)
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <button 
+                    className="select-all-btn"
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      selectAllInCategory(categoryName); 
+                    }}
+                  >
+                    {selectedInCategory === categoryData.topics.length ? 'Deselect All' : 'Select All'}
+                  </button>
+                  <span className="expand-icon">
+                    {expandedCategories.has(categoryName) ? '▼' : '▶'}
+                  </span>
+                </div>
+              </div>
+              
+              {expandedCategories.has(categoryName) && (
+                <div className="category-content expanded">
+                  {selectedInCategory > 0 && (
+                    <div className="category-summary">
+                      Selected: {selectedInCategory} of {categoryData.topics.length} templates
+                    </div>
+                  )}
+                  {categoryData.topics.map(topic => (
+                    <div 
+                      key={topic.id}
+                      className="topic-item"
+                      onClick={() => toggleTopic(topic.id)}
+                    >
+                      <div className={`topic-checkbox ${
+                        selectedTopics.some(selected => selected.id === topic.id) ? 'checked' : ''
+                      }`}>
+                        {selectedTopics.some(selected => selected.id === topic.id) && '✓'}
+                      </div>
+                      <div className="topic-info">
+                        <div className="topic-title">{topic.title}</div>
+                        <div className="topic-description">{topic.description}</div>
+                      </div>
+                      <div className="topic-meta">
+                        <div className="version-info">
+                          <span className="document-version">{topic.version}</span>
+                          <span className="last-updated">Updated: {topic.lastUpdated}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default TopicSelector;
