@@ -5,22 +5,70 @@
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Add height constraints to prevent overlap */
+    max-height: 60vh; /* Limit to 60% of viewport height */
+    overflow-y: auto; /* Enable scrolling when content exceeds height */
+    display: flex;
+    flex-direction: column;
 }
 
 .tree-view {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;  /* Reduced from 10px */
-  margin-top: -5px;  /* Added negative margin to reduce space */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: -5px;
+    /* Make tree-view scrollable */
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(60vh - 120px); /* Account for header and padding */
 }
 
 .tree-category {
-  margin-bottom: 6px;  /* Reduced from 8px */
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  overflow: hidden;
+    margin-bottom: 6px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    /* Ensure categories don't expand beyond container */
+    flex-shrink: 0;
 }
+
+.category-content {
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    /* Add max height and scrolling for expanded categories */
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for better appearance */
+.section::-webkit-scrollbar,
+.tree-view::-webkit-scrollbar,
+.category-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.section::-webkit-scrollbar-track,
+.tree-view::-webkit-scrollbar-track,
+.category-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.section::-webkit-scrollbar-thumb,
+.tree-view::-webkit-scrollbar-thumb,
+.category-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.section::-webkit-scrollbar-thumb:hover,
+.tree-view::-webkit-scrollbar-thumb:hover,
+.category-content::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Keep all your existing styles below, just add these modifications */
 
 .category-header {
     display: flex;
@@ -32,6 +80,34 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
     user-select: none;
+    /* Ensure header doesn't shrink */
+    flex-shrink: 0;
+}
+
+/* Add responsive behavior */
+@media (max-width: 1200px) {
+    .section {
+        max-height: 50vh;
+    }
+    
+    .tree-view {
+        max-height: calc(50vh - 100px);
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        max-height: 45vh;
+        padding: 15px;
+    }
+    
+    .tree-view {
+        max-height: calc(45vh - 80px);
+    }
+    
+    .category-content {
+        max-height: 200px;
+    }
 }
 
 .category-header:hover {
@@ -160,19 +236,14 @@
     transform: rotate(90deg);
 }
 
-.category-content {
-    background: white;
-    border-top: 1px solid #e0e0e0;
-}
-
 .loading {
-  padding: 20px;
-  text-align: center;
-  color: #666;
+    padding: 20px;
+    text-align: center;
+    color: #666;
 }
 
 .error {
-  padding: 20px;
-  text-align: center;
-  color: #ff4444;
+    padding: 20px;
+    text-align: center;
+    color: #ff4444;
 }

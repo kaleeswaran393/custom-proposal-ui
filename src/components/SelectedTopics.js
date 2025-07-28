@@ -9,15 +9,6 @@ const SelectedTopics = ({
   statusMessage,
   generateProposal
 }) => {
-  // Group topics by category
-  const groupedSelectedTopics = selectedTopics.reduce((acc, topic) => {
-    const category = topic.category || 'Uncategorized';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(topic);
-    return acc;
-  }, {});
 
   return (
     <div className="section full-width">
@@ -32,27 +23,25 @@ const SelectedTopics = ({
             No templates selected yet. Click on checkboxes in the tree above to add them.
           </p>
         ) : (
-          Object.entries(groupedSelectedTopics).map(([category, topics]) => (
-            <div key={category} style={{ marginBottom: '15px' }}>
+          // Display topics in selection order without grouping
+          selectedTopics.map((topic, index) => (
+            <div key={`${topic.id}_${index}`} style={{ marginBottom: '15px' }}>
               <h4 style={{ color: '#4CAF50', marginBottom: '8px', fontSize: '0.9rem' }}>
-                {(topicCategories[category]?.icon || '📁')} {category}
+                {(topicCategories[topic.category]?.icon || '📁')} {topic.category}
               </h4>
-              {topics.map(topic => {
-                return (
-                  <div key={topic.id} className="selected-topic">
-                    <div>
-                      <strong>{topic.title}</strong>
-                      <span style={{ color: '#666', marginLeft: '10px' }}>{topic.version}</span>
-                    </div>
-                    <button 
-                      className="remove-btn"
-                      onClick={() => removeTopic(topic.id)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
+              <div className="selected-topic">
+                <div>
+                  <strong>{topic.title}</strong>
+                  <span style={{ color: '#666', marginLeft: '10px' }}>{topic.lastUpdated}</span>
+                </div>
+                <button 
+                  className="remove-btn"
+                  onClick={() => removeTopic(topic.id)}
+                  title="Remove from selection"
+                >
+                  ×
+                </button>
+              </div>
             </div>
           ))
         )}

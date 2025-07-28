@@ -46,7 +46,7 @@ const TopicSelector = ({
       acc[category.name] = {
         icon: getCategoryIcon(category.name),
         topics: category.children?.map(file => ({
-          id: file.name.replace('.docx', ''),
+          id: `${category.name}_${file.name.replace('.docx', '')}`, // Make ID unique by adding category
           title: file.name.replace('.docx', ''),
           fileName: file.name,
           category: category.name,
