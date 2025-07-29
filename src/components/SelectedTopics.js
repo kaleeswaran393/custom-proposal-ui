@@ -23,7 +23,6 @@ const SelectedTopics = ({
             No templates selected yet. Click on checkboxes in the tree above to add them.
           </p>
         ) : (
-          // Display topics in selection order without grouping
           selectedTopics.map((topic, index) => (
             <div key={`${topic.id}_${index}`} style={{ marginBottom: '15px' }}>
               <h4 style={{ color: '#4CAF50', marginBottom: '8px', fontSize: '0.9rem' }}>
@@ -38,6 +37,7 @@ const SelectedTopics = ({
                   className="remove-btn"
                   onClick={() => removeTopic(topic.id)}
                   title="Remove from selection"
+                  disabled={isGenerating}
                 >
                   ×
                 </button>
@@ -48,16 +48,43 @@ const SelectedTopics = ({
       </div>
       
       {isGenerating && (
-        <div className="progress-bar">
-          <div 
-            className="progress-fill"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="progress-container" style={{ margin: '20px 0' }}>
+          <div className="progress-bar" style={{ 
+            width: '100%', 
+            height: '8px', 
+            backgroundColor: '#f0f0f0', 
+            borderRadius: '4px',
+            overflow: 'hidden'
+          }}>
+            <div 
+              className="progress-fill"
+              style={{ 
+                width: `${progress}%`,
+                height: '100%',
+                backgroundColor: '#FF6B00',
+                transition: 'width 0.3s ease',
+                borderRadius: '4px'
+              }}
+            />
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '5px', fontSize: '0.9rem', color: '#666' }}>
+            {progress}% Complete
+          </div>
         </div>
       )}
       
       {statusMessage.visible && (
-        <div className={`status-message ${statusMessage.type}`}>
+        <div className={`status-message ${statusMessage.type}`} style={{
+          padding: '12px',
+          borderRadius: '6px',
+          margin: '15px 0',
+          backgroundColor: statusMessage.type === 'success' ? '#d4edda' : 
+                          statusMessage.type === 'error' ? '#f8d7da' : '#d1ecf1',
+          borderColor: statusMessage.type === 'success' ? '#c3e6cb' : 
+                      statusMessage.type === 'error' ? '#f5c6cb' : '#bee5eb',
+          color: statusMessage.type === 'success' ? '#155724' : 
+                statusMessage.type === 'error' ? '#721c24' : '#0c5460'
+        }}>
           <div dangerouslySetInnerHTML={{ __html: statusMessage.text }} />
         </div>
       )}
@@ -66,6 +93,18 @@ const SelectedTopics = ({
         className="generate-btn"
         onClick={generateProposal}
         disabled={isGenerating || selectedTopics.length === 0}
+        style={{
+          width: '100%',
+          padding: '15px',
+          backgroundColor: isGenerating ? '#ccc' : '#FF6B00',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '1.1rem',
+          fontWeight: 'bold',
+          cursor: isGenerating ? 'not-allowed' : 'pointer',
+          transition: 'background-color 0.3s ease'
+        }}
       >
         {isGenerating ? '⏳ Generating Proposal...' : '🚀 Generate Proposal'}
       </button>

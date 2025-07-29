@@ -59,7 +59,7 @@ const TopicSelector = ({
 
   const getCategoryIcon = (categoryName) => {
     const icons = {
-      '1.Title': '📝',
+      '1.Cover Page': '📝',
       '2.Application': '📄',
       '3.Cloud': '☁️',
       '4.SAP': '💼',

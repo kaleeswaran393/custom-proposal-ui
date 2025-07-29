@@ -3,6 +3,7 @@ import ClientInformation from './ClientInformation';
 import TopicSelector from './TopicSelector';
 import SelectedTopics from './SelectedTopics';
 import './PowerPointProposalGenerator.css';
+import { proposalService } from '../services/proposalService';
 
 const PowerPointProposalGenerator = () => {
   const [selectedTopics, setSelectedTopics] = useState([]);
@@ -109,50 +110,82 @@ const PowerPointProposalGenerator = () => {
   };
 
   // Generate proposal (simulation)
-  const generateProposal = () => {
+  const generateProposal = async () => {
     if (selectedTopics.length === 0) {
-      showStatus('Please select at least one topic before generating the proposal.', 'error');
+      showStatus('Please select at least one template before generating.', 'error');
       return;
     }
 
-    if (!clientName || !projectName) {
-      showStatus('Please fill in client name and project name.', 'error');
+    if (!clientName.trim() || !projectName.trim() || !tenderName.trim()) {
+      showStatus('Please fill in all required fields (Client Name, Project Name, Tender Name).', 'error');
       return;
     }
 
-    setIsGenerating(true);
-    setProgress(0);
+    try {
+      setIsGenerating(true);
+      setProgress(0);
+      showStatus('Preparing proposal generation...', 'info');
 
-    // Simulate generation process
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + Math.random() * 20;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setIsGenerating(false);
-            setProgress(0);
-            showStatus(
-              `✅ Proposal "${projectName}" for ${clientName} has been generated successfully! 
-               Total templates: ${selectedTopics.length}
-               ${clientLogoFile ? '<br>✅ Client logo included in the proposal' : ''}
-               <br><small>In a real implementation, the PowerPoint file would be downloaded automatically.</small>`,
-              'success'
-            );
-          }, 500);
-          return 100;
-        }
-        return newProgress;
+      // Build document paths from selected topics
+      const documentPaths = selectedTopics.map(topic => {
+        return `${topic.category}/${topic.fileName}`;
       });
-    }, 200);
+
+      // Prepare the request payload with correct field names
+      const proposalRequest = {
+        documentPaths: documentPaths,
+        clientInformation: {
+          clientName: clientName.trim(),      // Changed from CLIENT_NAME
+          projectName: projectName.trim(),    // Changed from PROJECT_NAME
+          tenderName: tenderName.trim()       // Changed from TENDER_NAME
+        }
+      };
+
+      console.log('Sending proposal request:', proposalRequest);
+
+      // Update progress
+      setProgress(25);
+      showStatus('Sending request to server...', 'info');
+
+      // Call the backend API
+      const result = await proposalService.generateProposal(proposalRequest);
+
+      // Update progress
+      setProgress(75);
+      showStatus('Processing templates...', 'info');
+
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Complete
+      setProgress(100);
+      showStatus(`
+        <strong>✅ Proposal generated successfully!</strong><br/>
+        <small>Generated with ${selectedTopics.length} templates for ${clientName}</small><br/>
+        <small>Check your output directory for the generated proposal</small>
+      `, 'success');
+
+      // Reset after success
+      setTimeout(() => {
+        setProgress(0);
+        showStatus('', '', false);
+      }, 5000);
+
+    } catch (error) {
+      console.error('Error generating proposal:', error);
+      setProgress(0);
+      showStatus(`
+        <strong>❌ Failed to generate proposal</strong><br/>
+        <small>${error.message || 'An unexpected error occurred. Please try again.'}</small>
+      `, 'error');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   // Show status message
-  const showStatus = (message, type) => {
-    setStatusMessage({ text: message, type, visible: true });
-    setTimeout(() => {
-      setStatusMessage(prev => ({ ...prev, visible: false }));
-    }, 5000);
+  const showStatus = (text, type, visible = true) => {
+    setStatusMessage({ text, type, visible });
   };
 
   return (
