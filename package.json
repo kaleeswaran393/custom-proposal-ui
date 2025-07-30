@@ -1,5 +1,5 @@
 {
-  "name": "powerpoint-proposal-generator",
+  "name": "doc-merger",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

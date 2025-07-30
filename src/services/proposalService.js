@@ -1,7 +1,7 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
 
 export const proposalService = {
-  async generateProposal(proposalData) {
+  async mergeTemplates(proposalData) {
     try {
       const response = await fetch(`${API_BASE_URL}/documents/merge-proposal`, {
         method: 'POST',
@@ -19,7 +19,7 @@ export const proposalService = {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Error generating proposal:', error);
+      console.error('Error merging templates:', error);
       throw error;
     }
   }

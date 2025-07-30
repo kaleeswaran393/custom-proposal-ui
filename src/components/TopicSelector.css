@@ -247,3 +247,118 @@
     text-align: center;
     color: #ff4444;
 }
+
+/* Enhanced drag and drop styles */
+.selected-templates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.selected-template-item {
+  position: relative;
+  user-select: none;
+}
+
+.selected-template-item.dragging {
+  opacity: 0.6 !important;
+  transform: rotate(3deg) scale(1.02) !important;
+  cursor: grabbing !important;
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
+}
+
+.selected-template-item.drag-over {
+  border-color: #0969da !important;
+  background-color: #f6f8fa !important;
+  transform: translateY(-3px) scale(1.01) !important;
+  box-shadow: 0 6px 20px rgba(9, 105, 218, 0.3) !important;
+}
+
+.selected-template-item:hover:not(.dragging) {
+  border-color: #d0d7de !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px);
+}
+
+/* Drag handle styling */
+.selected-template-item > div:first-child {
+  transition: background-color 0.2s ease;
+}
+
+.selected-template-item.dragging > div:first-child {
+  cursor: grabbing !important;
+}
+
+/* Smooth animations */
+.selected-template-item {
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* Better visual feedback for drag area */
+.selected-template-item.drag-over::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0969da, #58a6ff);
+  border-radius: 2px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .selected-template-item {
+    padding: 12px !important;
+  }
+  
+  .selected-template-item > div:first-child {
+    margin-right: 12px !important;
+  }
+  
+  .selected-template-item > div:nth-child(2) > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  
+  .selected-template-item > div:nth-child(2) > div > span:nth-child(2) {
+    display: none; /* Hide path separator on mobile */
+  }
+  
+  .selected-template-item > div:last-child {
+    margin-left: 12px !important;
+    gap: 4px !important;
+  }
+  
+  .selected-template-item > div:last-child button {
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 4px 6px !important;
+  }
+}
+
+/* Focus and accessibility */
+.selected-template-item button:focus {
+  outline: 2px solid #0969da;
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.selected-template-item:focus-within {
+  border-color: #0969da !important;
+}
+
+/* Prevent text selection during drag */
+.selected-template-item.dragging * {
+  user-select: none !important;
+  pointer-events: none !important;
+}

@@ -13,7 +13,7 @@ const PowerPointProposalGenerator = () => {
   const [clientName, setClientName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [tenderName, setTenderName] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isMerging, setIsMerging] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState({ text: '', type: '', visible: false });
   const [topicCategories, setTopicCategories] = useState({});
@@ -109,10 +109,10 @@ const PowerPointProposalGenerator = () => {
     setSelectedTopics(prev => prev.filter(t => t.id !== topicId));
   };
 
-  // Generate proposal (simulation)
-  const generateProposal = async () => {
+  // Merge templates (simulation)
+  const mergeTemplates = async () => {
     if (selectedTopics.length === 0) {
-      showStatus('Please select at least one template before generating.', 'error');
+      showStatus('Please select at least one template before merging.', 'error');
       return;
     }
 
@@ -122,9 +122,9 @@ const PowerPointProposalGenerator = () => {
     }
 
     try {
-      setIsGenerating(true);
+      setIsMerging(true);
       setProgress(0);
-      showStatus('Preparing proposal generation...', 'info');
+      showStatus('Preparing template merge...', 'info');
 
       // Build document paths from selected topics
       const documentPaths = selectedTopics.map(topic => {
@@ -148,7 +148,7 @@ const PowerPointProposalGenerator = () => {
       showStatus('Sending request to server...', 'info');
 
       // Call the backend API
-      const result = await proposalService.generateProposal(proposalRequest);
+      const result = await proposalService.mergeTemplates(proposalRequest);
 
       // Update progress
       setProgress(75);
@@ -160,9 +160,9 @@ const PowerPointProposalGenerator = () => {
       // Complete
       setProgress(100);
       showStatus(`
-        <strong>✅ Proposal generated successfully!</strong><br/>
-        <small>Generated with ${selectedTopics.length} templates for ${clientName}</small><br/>
-        <small>Check your output directory for the generated proposal</small>
+        <strong>✅ Templates merged successfully!</strong><br/>
+        <small>Merged ${selectedTopics.length} templates for ${clientName}</small><br/>
+        <small>Check your output directory for the merged document</small>
       `, 'success');
 
       // Reset after success
@@ -172,14 +172,14 @@ const PowerPointProposalGenerator = () => {
       }, 5000);
 
     } catch (error) {
-      console.error('Error generating proposal:', error);
+      console.error('Error merging templates:', error);
       setProgress(0);
       showStatus(`
-        <strong>❌ Failed to generate proposal</strong><br/>
+        <strong>❌ Failed to merge templates</strong><br/>
         <small>${error.message || 'An unexpected error occurred. Please try again.'}</small>
       `, 'error');
     } finally {
-      setIsGenerating(false);
+      setIsMerging(false);
     }
   };
 
@@ -189,11 +189,11 @@ const PowerPointProposalGenerator = () => {
   };
 
   return (
-    <div className="powerpoint-generator">
+    <div className="doc-merger">
       <div className="container">
         {/* Header */}
         <div className="header">
-          <h1>🎯 Template Proposal Generator</h1>
+          <h1>📄 Doc Merger</h1>
         </div>
 
         <div className="main-content">
@@ -227,10 +227,11 @@ const PowerPointProposalGenerator = () => {
           selectedTopics={selectedTopics}
           removeTopic={removeTopic}
           topicCategories={topicCategories}
-          isGenerating={isGenerating}
+          isMerging={isMerging}
           progress={progress}
           statusMessage={statusMessage}
-          generateProposal={generateProposal}
+          mergeTemplates={mergeTemplates}
+          onReorderTopics={setSelectedTopics}
         />
       </div>
     </div>

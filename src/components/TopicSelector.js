@@ -59,12 +59,11 @@ const TopicSelector = ({
 
   const getCategoryIcon = (categoryName) => {
     const icons = {
-      '1.Cover Page': '📝',
-      '2.Application': '📄',
-      '3.Cloud': '☁️',
-      '4.SAP': '💼',
-      '5.Security': '🔒',
-      '6.Network': '🌐'
+      'Application': '📄',
+      'Cloud': '☁️',
+      'SAP': '💼',
+      'Security': '🔒',
+      'Network': '🌐'
     };
     return icons[categoryName] || '📁';
   };

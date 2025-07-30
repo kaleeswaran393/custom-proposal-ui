@@ -15,11 +15,12 @@ const Header = () => {
       </div>
       <div className="header-center">
         <nav>
-          <a href="#create" className="create-proposal-link">Create Proposal</a>
+          {/* Moved Create Proposal to header-right */}
         </nav>
       </div>
       <div className="header-right">
         <nav>
+          <a href="#create">Create Proposal</a>
           <a href="#templates">My Templates</a>
           <a href="#support">Help & Support</a>
         </nav>

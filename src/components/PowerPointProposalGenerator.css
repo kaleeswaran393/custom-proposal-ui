@@ -5,7 +5,7 @@
   --primary-light: #fff1e6;
 }
 
-.powerpoint-generator {
+.doc-merger {
   padding: 20px;
   min-height: 100vh;
 }
@@ -303,7 +303,7 @@
   background: #ff3742;
 }
 
-.generate-btn {
+.merge-btn {
   width: 100%;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
@@ -317,11 +317,11 @@
   margin-top: 20px;
 }
 
-.generate-btn:hover {
+.merge-btn:hover {
   box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
 }
 
-.generate-btn:disabled {
+.merge-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
   transform: none;

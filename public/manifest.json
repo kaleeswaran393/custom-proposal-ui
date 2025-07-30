@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Doc Merger",
+  "name": "Doc Merger - Document Template Merger",
   "icons": [
     {
       "src": "favicon.ico",
