@@ -24,13 +24,13 @@ const Header = () => {
           <a href="#templates">My Templates</a>
           <a href="#support">Help & Support</a>
         </nav>
-        <div className="user-profile">
+        {/* <div className="user-profile">
           <div className="avatar">JD</div>
           <div className="user-info">
             <span className="user-name">John Doe</span>
             <span className="user-role">Senior Manager</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

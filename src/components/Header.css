@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem; /* Reduced from 1rem to 0.5rem vertical padding */
   background: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -16,7 +16,7 @@
 .logo-icon {
   background: #ff4757;
   color: white;
-  height: 40px; /* Adjust based on your needs */
+  height: 60px; /* Increased from 40px */
   width: auto;
   object-fit: contain;
   display: flex;

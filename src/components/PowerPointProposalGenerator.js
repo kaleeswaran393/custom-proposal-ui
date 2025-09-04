@@ -13,6 +13,9 @@ const PowerPointProposalGenerator = () => {
   const [clientName, setClientName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [tenderName, setTenderName] = useState('');
+  const [clientLegalEntityName, setClientLegalEntityName] = useState('');
+  const [clientAddress, setClientAddress] = useState('');
+  const [lumenAccountDirectorName, setLumenAccountDirectorName] = useState('');
   const [isMerging, setIsMerging] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState({ text: '', type: '', visible: false });
@@ -116,8 +119,9 @@ const PowerPointProposalGenerator = () => {
       return;
     }
 
-    if (!clientName.trim() || !projectName.trim() || !tenderName.trim()) {
-      showStatus('Please fill in all required fields (Client Name, Project Name, Tender Name).', 'error');
+    // Only validate mandatory fields: Client Name and Project Name
+    if (!clientName.trim() || !projectName.trim()) {
+      showStatus('Please fill in all required fields (Client Name and Project Name).', 'error');
       return;
     }
 
@@ -135,9 +139,12 @@ const PowerPointProposalGenerator = () => {
       const proposalRequest = {
         documentPaths: documentPaths,
         clientInformation: {
-          clientName: clientName.trim(),      // Changed from CLIENT_NAME
-          projectName: projectName.trim(),    // Changed from PROJECT_NAME
-          tenderName: tenderName.trim()       // Changed from TENDER_NAME
+          clientName: clientName.trim(),
+          projectName: projectName.trim(),
+          tenderName: tenderName.trim(),
+          clientLegalEntityName: clientLegalEntityName.trim(),
+          clientAddress: clientAddress.trim(),
+          lumenAccountDirectorName: lumenAccountDirectorName.trim()
         }
       };
 
@@ -205,6 +212,12 @@ const PowerPointProposalGenerator = () => {
             setProjectName={setProjectName}
             tenderName={tenderName}
             setTenderName={setTenderName}
+            clientLegalEntityName={clientLegalEntityName}
+            setClientLegalEntityName={setClientLegalEntityName}
+            clientAddress={clientAddress}
+            setClientAddress={setClientAddress}
+            lumenAccountDirectorName={lumenAccountDirectorName}
+            setLumenAccountDirectorName={setLumenAccountDirectorName}
             logoPreview={logoPreview}
             handleLogoUpload={handleLogoUpload}
             removeLogo={removeLogo}

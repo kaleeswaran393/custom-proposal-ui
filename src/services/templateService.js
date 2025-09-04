@@ -1,9 +1,9 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const MERGE_TEMPLATE_API_URL = 'http://localhost:5000/api';
 
 export const templateService = {
     async getTemplatesStructure() {
         try {
-            const response = await fetch(`${API_BASE_URL}/templates/structure`);
+            const response = await fetch(`${MERGE_TEMPLATE_API_URL}/templates`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
